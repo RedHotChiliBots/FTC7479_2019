@@ -52,10 +52,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class TeleopTank extends OpMode {
 
     /* Declare OpMode members. */
-    Hardware robot           = new Hardware(); // use the class created to define a Pushbot's hardware
+    private Hardware robot           = new Hardware(); // use the class created to define a Pushbot's hardware
 
 
-    public void TelopTank_Iterative() {
+    public void TelopTank() {
         msStuckDetectInit = 10000;
     }
 
@@ -68,7 +68,7 @@ public class TeleopTank extends OpMode {
          * The init() method of the hardware class does all the work here
          */
         robot.init(hardwareMap);
-        telemetry.addData("Hardware", "Init");;
+        telemetry.addData("Hardware", "Init");
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");
