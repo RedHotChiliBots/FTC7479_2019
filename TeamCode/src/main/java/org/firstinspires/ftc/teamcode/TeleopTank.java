@@ -49,7 +49,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name="Teleop Tank", group="Teleop")
 //@Disabled
-public class TeleopTank_Iterative extends OpMode {
+public class TeleopTank extends OpMode {
 
     /* Declare OpMode members. */
     Hardware robot           = new Hardware(); // use the class created to define a Pushbot's hardware
