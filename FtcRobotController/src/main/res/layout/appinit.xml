@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/idAppInit"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/FIRST_FTC"
+    android:rowCount="2"
+    android:columnCount="3"
+    android:orientation="horizontal">
+    <Space />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_row="0"
+        android:gravity="center_vertical"
+        android:text="@string/allianceText"
+        android:textStyle="bold"
+        android:textAppearance="@android:style/TextAppearance" />
+
+    <RadioGroup
+        android:layout_width="180dp"
+        android:layout_height="23dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/buttonRed"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_row="0"
+            android:text="Red"
+            android:onClick="onAllianceClicked" />
+
+        <RadioButton
+            android:id="@+id/buttonBlue"
+            android:layout_column="2"
+            android:layout_row="0"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text="Blue"
+            android:onClick="onAllianceClicked" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_column="0"
+        android:layout_row="1"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="@string/positionText"
+        android:textStyle="bold"
+        android:textAppearance="@android:style/TextAppearance" />
+
+    <RadioGroup
+        android:layout_width="180dp"
+        android:layout_height="23dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/buttonFront"
+            android:layout_column="1"
+            android:layout_row="1"
+            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:text="Front"
+            android:onClick="onPositionClicked" />
+
+        <RadioButton
+            android:id="@+id/buttonBack"
+            android:layout_column="2"
+            android:layout_row="1"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:onClick="onPositionClicked" />
+
+    </RadioGroup>
+
+</GridLayout>

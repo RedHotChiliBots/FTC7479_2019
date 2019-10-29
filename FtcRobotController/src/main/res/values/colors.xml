@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- FIRST Progression of Program Colors -->
+    <color name="FIRST_JrLEGO">#00a651</color>
+    <color name="FIRST_LEGO">#ed1c24</color>
+    <color name="FIRST_FTC">#f57e25</color>
+    <color name="FIRST_FRC">#009cd7</color>
+    <!-- FIRST Logo Colors -->
+    <color name="FIRST_Red">#ed1c24</color>
+    <color name="FIRST_Blue">#0066b3</color>
+    <color name="FIRST_Black">#231f20</color>
+    <color name="FIRST_Gray">#9a989a</color>
+
+    <color name="transparent_color">#00000000</color>
+</resources>
+

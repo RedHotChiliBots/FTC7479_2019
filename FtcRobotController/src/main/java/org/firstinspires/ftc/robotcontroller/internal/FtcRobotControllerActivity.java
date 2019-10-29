@@ -59,6 +59,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.RadioButton;
 
 import com.google.blocks.ftcrobotcontroller.BlocksActivity;
 import com.google.blocks.ftcrobotcontroller.ProgrammingModeActivity;
@@ -171,6 +172,11 @@ public class FtcRobotControllerActivity extends Activity
 
   protected WifiMuteStateMachine wifiMuteStateMachine;
   protected MotionDetection motionDetection;
+
+  protected static boolean redAlliance = false;
+  protected static boolean blueAlliance = false;
+  protected static boolean frontPosition = false;
+  protected static boolean backPosition = false;
 
   private static boolean permissionsValidated = false;
 
@@ -404,7 +410,45 @@ public class FtcRobotControllerActivity extends Activity
     return result;
   }
 
-  @Override
+
+    public void onAllianceClicked(View view) {
+      // Is the button now checked?
+      boolean checked = ((RadioButton) view).isChecked();
+
+      // Check which radio button was clicked
+      int id = view.getId();
+
+      if (id == R.id.buttonRed && checked) {
+        blueAlliance = false;
+        redAlliance = true;
+      } else if (id == R.id.buttonBlue && checked) {
+        redAlliance = false;
+        blueAlliance = true;
+      }
+    }
+
+    public void onPositionClicked(View view) {
+      // Is the button now checked?
+      boolean checked = ((RadioButton) view).isChecked();
+
+      // Check which radio button was clicked
+      int id = view.getId();
+
+      if (id == R.id.buttonFront && checked) {
+        backPosition  = false;
+        frontPosition = true;
+      } else if (id == R.id.buttonBack && checked) {
+        frontPosition = false;
+        backPosition  = true;
+      }
+    }
+
+    public static boolean isRed() { return redAlliance; }
+    public static boolean isBlue() { return blueAlliance; }
+    public static boolean isFront() { return frontPosition; }
+    public static boolean isBack() { return backPosition; }
+
+    @Override
   protected void onStart() {
     super.onStart();
     RobotLog.vv(TAG, "onStart()");
