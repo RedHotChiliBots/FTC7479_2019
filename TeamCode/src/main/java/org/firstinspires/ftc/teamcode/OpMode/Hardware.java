@@ -98,12 +98,12 @@ public class Hardware {
     public enum COLOR {RED,BLUE,OTHER}
     public enum TRACK {TRACKING,STOPPED,UNKNOWN}
 
-    private Map<POS, Double> stonePos;
-    private Map<POS, Double> foundationPos;
+    private Map<POS, Double> stonePos = null;
+    private Map<POS, Double> foundationPos = null;
 
-    private POS fntnPosition = POS.STOW;
-    private POS stonePosition = POS.STOW;
-    private TRACK trackState = TRACK.UNKNOWN;
+    private POS fntnPosition = null;
+    private POS stonePosition = null;
+    private TRACK trackState = null;
     private double leftDrive = 0.0;
     private double rightDrive = 0.0;
 
@@ -144,6 +144,7 @@ public class Hardware {
          */
 //        parameters.cameraName = webcamName;
 
+        setTrackState(TRACK.UNKNOWN);
 
         /***********************************************************/
         /*********** Initialize Constant Values         ************/
