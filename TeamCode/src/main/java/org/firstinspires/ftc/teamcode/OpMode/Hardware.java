@@ -38,6 +38,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is NOT an opmode.
@@ -88,6 +89,7 @@ public class Hardware {
     public final double FDTN_UP  = 0.75;
     public final double FDTN_DN  = 0.0;
     public final double FDTN_STOW  = FDTN_UP;
+
     public final double STONE_UP  = 0.75;
     public final double STONE_DN  = 0.0;
     public final double STONE_STOW  = STONE_UP;
@@ -96,16 +98,15 @@ public class Hardware {
     public enum COLOR {RED,BLUE,OTHER}
     public enum TRACK {TRACKING,STOPPED,UNKNOWN}
 
+    private Map<POS, Double> stonePos;
+    private Map<POS, Double> foundationPos;
+
     private POS fntnPosition = POS.STOW;
     private POS stonePosition = POS.STOW;
-
     private TRACK trackState = TRACK.UNKNOWN;
-
     private double leftDrive = 0.0;
     private double rightDrive = 0.0;
-
-
-
+    
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();
@@ -142,6 +143,18 @@ public class Hardware {
          * We also indicate which camera on the RC we wish to use.
          */
 //        parameters.cameraName = webcamName;
+
+
+        /***********************************************************/
+        /*********** Initialize Constant Values         ************/
+        /***********************************************************/
+        stonePos.put(POS.UP, STONE_UP);
+        stonePos.put(POS.DOWN, STONE_DN);
+        stonePos.put(POS.STOW, STONE_STOW);
+
+        foundationPos.put(POS.UP, FDTN_UP);
+        foundationPos.put(POS.DOWN, FDTN_DN);
+        foundationPos.put(POS.STOW, FDTN_STOW);
 
         /***********************************************************/
         /*********** Define and Initialize Drive Motors ************/
@@ -187,13 +200,7 @@ public class Hardware {
 
     public void setFoundation(Hardware.POS pos) {
         fntnPosition = pos;
-        if (pos == POS.UP) {
-            foundationServo.setPosition(FDTN_UP);
-        } else if (pos == POS.DOWN) {
-            foundationServo.setPosition(FDTN_DN);
-        } else {
-            foundationServo.setPosition(FDTN_STOW);
-        }
+        foundationServo.setPosition(foundationPos.get(FDTN_UP));
     }
 
     public Hardware.POS getFoundation() {
@@ -202,13 +209,7 @@ public class Hardware {
 
     public void setStone(Hardware.POS pos) {
         stonePosition = pos;
-        if (pos == POS.UP) {
-            stoneServo.setPosition(STONE_UP);
-        } else if (pos == POS.DOWN) {
-            stoneServo.setPosition(STONE_DN);
-        } else {
-            stoneServo.setPosition(STONE_STOW);
-        }
+        stoneServo.setPosition(stonePos.get(STONE_UP));
     }
 
     public Hardware.POS getStone() {
