@@ -98,16 +98,17 @@ public class TeleopTank extends OpMode {
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         robot.setDriveSpeed(-gamepad1.left_stick_y, -gamepad1.right_stick_y);
 
+
         if (gamepad2.left_bumper) {
-            robot.setStone(Hardware.POS.UP);
+            robot.setFoundation(Hardware.POS.UP);
         } else if (gamepad2.right_bumper) {
-            robot.setStone(Hardware.POS.DOWN);
+            robot.setFoundation(Hardware.POS.DOWN);
         }
 
         if (Math.abs(gamepad2.left_trigger) > 0.5) {
-            robot.setFoundation(Hardware.POS.UP);
+            robot.setStone(Hardware.POS.UP);
         } else if (Math.abs(gamepad2.right_trigger) > 0.5) {
-            robot.setFoundation(Hardware.POS.DOWN);
+            robot.setStone(Hardware.POS.DOWN);
         }
 
         // Send telemetry message to signify robot running;
