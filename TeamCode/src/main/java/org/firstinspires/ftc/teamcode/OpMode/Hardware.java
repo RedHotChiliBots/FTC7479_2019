@@ -27,14 +27,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.OpMode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This is NOT an opmode.
@@ -69,8 +72,8 @@ public class Hardware {
     private static final String VUFORIA_KEY =
             "AQvZgMD/////AAABmZquHHM/akuGkmTcIcssi+gINVzua6tbuI6iq9wY3ypvUkndXoRQncprZtLgjoNzaAZx4jTucekE90oZj0G/CqgXL1uzhrV4+knSziKUwgFVy3SVvGzw0+/ZqHVFwAFe6wsty2B2Mxg+uIoAFq7tB5WRB6GMx1j47m9q7+hkx3+KOKasSiO/T8Fd/nehQkRVBwB1XJNEo28R0yicJfdGkhxgJOK/CGTkN49MooMjaSx1PFpgx2Bx8wxJwNMcOxzh3zYeiwddMZvsycSf3h2WTDHBHeFkW+f00i0071LJRaawELtRmIxP/pmV2Squ/1daGYjLGKveSPH5tBIHiQvGwdAnv3QrRZnhEf6ztG9eELEs";
 
-    private VuforiaLocalizer.Parameters parameters;
-    private WebcamName webcamName = null;
+    public VuforiaLocalizer.Parameters parameters;
+//    private WebcamName webcamName = null;
 
 
     /* Public OpMode members. */
@@ -79,13 +82,29 @@ public class Hardware {
     public DcMotor leftRearDrive    = null;
     public DcMotor rightRearDrive   = null;
 
-//    public DcMotor  leftArm     = null;
-//    public Servo    leftClaw    = null;
-//    public Servo    rightClaw   = null;
+    public Servo foundationServo  = null;
+    public Servo stoneServo  = null;
 
-//    public static final double MID_SERVO       =  0.5 ;
-//    public static final double ARM_UP_POWER    =  0.45 ;
-//    public static final double ARM_DOWN_POWER  = -0.45 ;
+    public final double FDTN_UP  = 0.75;
+    public final double FDTN_DN  = 0.0;
+    public final double FDTN_STOW  = FDTN_UP;
+    public final double STONE_UP  = 0.75;
+    public final double STONE_DN  = 0.0;
+    public final double STONE_STOW  = STONE_UP;
+
+    public enum POS {UP, DOWN, STOW};
+    public enum COLOR {RED,BLUE,OTHER}
+    public enum TRACK {TRACKING,STOPPED,UNKNOWN}
+
+    private POS fntnPosition = POS.STOW;
+    private POS stonePosition = POS.STOW;
+
+    private TRACK trackState = TRACK.UNKNOWN;
+
+    private double leftDrive = 0.0;
+    private double rightDrive = 0.0;
+
+
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -122,16 +141,15 @@ public class Hardware {
         /**
          * We also indicate which camera on the RC we wish to use.
          */
-        parameters.cameraName = webcamName;
-
+//        parameters.cameraName = webcamName;
 
         /***********************************************************/
         /*********** Define and Initialize Drive Motors ************/
         /***********************************************************/
         // Define each drive motor
-        leftFrontDrive  = hwMap.get(DcMotor.class, "leftFrontDrive");
+        leftFrontDrive = hwMap.get(DcMotor.class, "leftFrontDrive");
         rightFrontDrive = hwMap.get(DcMotor.class, "rightFrontDrive");
-        leftRearDrive  = hwMap.get(DcMotor.class, "leftRearDrive");
+        leftRearDrive = hwMap.get(DcMotor.class, "leftRearDrive");
         rightRearDrive = hwMap.get(DcMotor.class, "rightRearDrive");
 
         // Initialize drive motors to correct rotation
@@ -153,23 +171,69 @@ public class Hardware {
         leftRearDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightRearDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        /***********************************************************/
+        /************** Define and Initialize Servos ***************/
+        /***********************************************************/
 
+        foundationServo = hwMap.get(Servo.class, "foundationServo");
 
+        setFoundation(POS.STOW);
 
-//        leftArm    = hwMap.get(DcMotor.class, "left_arm");
-//        leftArm.setPower(0);
-//        leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        stoneServo = hwMap.get(Servo.class, "stoneServo");
 
-
-        // Define and initialize ALL installed servos.
-//        leftClaw  = hwMap.get(Servo.class, "left_hand");
-//        rightClaw = hwMap.get(Servo.class, "right_hand");
-//        leftClaw.setPosition(MID_SERVO);
-//        rightClaw.setPosition(MID_SERVO);
-
-//        double          clawOffset  = 0.0 ;                  // Servo mid position
-//        final double    CLAW_SPEED  = 0.02 ;                 // sets rate to move servo
-
+        setStone(POS.STOW);
     }
- }
+
+
+    public void setFoundation(Hardware.POS pos) {
+        fntnPosition = pos;
+        if (pos == POS.UP) {
+            foundationServo.setPosition(FDTN_UP);
+        } else if (pos == POS.DOWN) {
+            foundationServo.setPosition(FDTN_DN);
+        } else {
+            foundationServo.setPosition(FDTN_STOW);
+        }
+    }
+
+    public Hardware.POS getFoundation() {
+        return fntnPosition;
+    }
+
+    public void setStone(Hardware.POS pos) {
+        stonePosition = pos;
+        if (pos == POS.UP) {
+            stoneServo.setPosition(STONE_UP);
+        } else if (pos == POS.DOWN) {
+            stoneServo.setPosition(STONE_DN);
+        } else {
+            stoneServo.setPosition(STONE_STOW);
+        }
+    }
+
+    public Hardware.POS getStone() {
+        return stonePosition;
+    }
+
+    public void setDriveSpeed(double l, double r) {
+        leftDrive = l;
+        rightDrive = r;
+        leftFrontDrive.setPower(l);
+        rightFrontDrive.setPower(r);
+        leftRearDrive.setPower(l);
+        rightRearDrive.setPower(r);
+    }
+
+    public List<Double> getDriveSpeed() {
+        return Arrays.asList(leftDrive, rightDrive);
+    }
+
+    public void setTrackState(TRACK s) {
+        trackState = s;
+    }
+
+    public TRACK getTrackState() {
+        return trackState;
+    }
+}
 

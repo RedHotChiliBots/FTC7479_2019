@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.OpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -70,9 +70,6 @@ public class TeleopTank extends OpMode {
         robot.init(hardwareMap);
         telemetry.addData("Hardware", "Init");
 
-        // Send telemetry message to signify robot waiting;
-        telemetry.addData("Say", "Hello Driver");
-
         telemetry.update();
     }
 
@@ -97,42 +94,27 @@ public class TeleopTank extends OpMode {
      */
     @Override
     public void loop() {
-        double left;
-        double right;
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
-        left = -gamepad1.left_stick_y;
-        right = -gamepad1.right_stick_y;
+        robot.setDriveSpeed(-gamepad1.left_stick_y, -gamepad1.right_stick_y);
 
-        robot.leftFrontDrive.setPower(left);
-        robot.rightFrontDrive.setPower(right);
-        robot.leftRearDrive.setPower(left);
-        robot.rightRearDrive.setPower(right);
+        if (gamepad2.left_bumper) {
+            robot.setStone(Hardware.POS.UP);
+        } else if (gamepad2.right_bumper) {
+            robot.setStone(Hardware.POS.DOWN);
+        }
 
-
-        // Use gamepad left & right Bumpers to open and close the claw
-//        if (gamepad1.right_bumper)
-//            clawOffset += CLAW_SPEED;
-//        else if (gamepad1.left_bumper)
-//            clawOffset -= CLAW_SPEED;
-
-        // Move both servos to new position.  Assume servos are mirror image of each other.
-//        clawOffset = Range.clip(clawOffset, -0.5, 0.5);
-//      robot.leftClaw.setPosition(robot.MID_SERVO + clawOffset);
-//        robot.rightClaw.setPosition(robot.MID_SERVO - clawOffset);
-
-        // Use gamepad buttons to move the arm up (Y) and down (A)
-//        if (gamepad1.y)
-//            robot.leftArm.setPower(robot.ARM_UP_POWER);
-//        else if (gamepad1.a)
-//            robot.leftArm.setPower(robot.ARM_DOWN_POWER);
-//        else
-//            robot.leftArm.setPower(0.0);
+        if (Math.abs(gamepad2.left_trigger) > 0.5) {
+            robot.setFoundation(Hardware.POS.UP);
+        } else if (Math.abs(gamepad2.right_trigger) > 0.5) {
+            robot.setFoundation(Hardware.POS.DOWN);
+        }
 
         // Send telemetry message to signify robot running;
 //        telemetry.addData("claw",  "Offset = %.2f", clawOffset);
-        telemetry.addData("left",  "%.2f", left);
-        telemetry.addData("right", "%.2f", right);
+        telemetry.addData("Drive {left, right}",  "%4.2f  %4.2f", robot.getDriveSpeed());
+        telemetry.addData("Stone", "%.2f", robot.getStone());
+        telemetry.addData("Foundation", "%.2f", robot.getFoundation());
         telemetry.update();
     }
 
