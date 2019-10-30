@@ -70,5 +70,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="packageName">@string/packageNameRobotController</string>
 
     <string name="allianceText">Alliance</string>
-    <string name="positionText">Position</string>
+    <string name="redText">Red</string>
+    <string name="blueText">Blue</string>
+    <string name="skystoneText">SkyStone</string>
+    <string name="foundationText">Foundation</string>
+    <string name="parkText">Park</string>
 </resources>

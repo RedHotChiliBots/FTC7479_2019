@@ -60,6 +60,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.RadioButton;
+import android.widget.CheckBox;
 
 import com.google.blocks.ftcrobotcontroller.BlocksActivity;
 import com.google.blocks.ftcrobotcontroller.ProgrammingModeActivity;
@@ -175,8 +176,9 @@ public class FtcRobotControllerActivity extends Activity
 
   protected static boolean redAlliance = false;
   protected static boolean blueAlliance = false;
-  protected static boolean frontPosition = false;
-  protected static boolean backPosition = false;
+  protected static boolean skystoneEnable = false;
+  protected static boolean foundationEnable = false;
+  protected static boolean parkEnable = false;
 
   private static boolean permissionsValidated = false;
 
@@ -427,26 +429,26 @@ public class FtcRobotControllerActivity extends Activity
       }
     }
 
-    public void onPositionClicked(View view) {
+    public void onSkyStoneClicked(View view) {
       // Is the button now checked?
-      boolean checked = ((RadioButton) view).isChecked();
+      skystoneEnable = ((CheckBox) view).isChecked();
+    }
 
-      // Check which radio button was clicked
-      int id = view.getId();
+    public void onFoundationClicked(View view) {
+      // Is the button now checked?
+      foundationEnable = ((CheckBox) view).isChecked();
+    }
 
-      if (id == R.id.buttonFront && checked) {
-        backPosition  = false;
-        frontPosition = true;
-      } else if (id == R.id.buttonBack && checked) {
-        frontPosition = false;
-        backPosition  = true;
-      }
+    public void onParkClicked(View view) {
+      // Is the button now checked?
+      parkEnable = ((CheckBox) view).isChecked();
     }
 
     public static boolean isRed() { return redAlliance; }
     public static boolean isBlue() { return blueAlliance; }
-    public static boolean isFront() { return frontPosition; }
-    public static boolean isBack() { return backPosition; }
+    public static boolean isSkyStone() { return skystoneEnable; }
+    public static boolean isFoundation() { return foundationEnable; }
+    public static boolean isPark() { return parkEnable; }
 
     @Override
   protected void onStart() {
