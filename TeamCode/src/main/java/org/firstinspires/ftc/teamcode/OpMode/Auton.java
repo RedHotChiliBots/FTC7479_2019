@@ -58,7 +58,7 @@ import java.util.List;
 
 @TeleOp(name="Auton SkyStone", group="Auton")
 //@Disabled
-public class Auton_SkyStone extends LinearOpMode {
+public class Auton extends LinearOpMode {
 
     /* Declare OpMode members. */
     Hardware robot           = new Hardware(); // use the class created to define a Pushbot's hardware
@@ -74,6 +74,7 @@ public class Auton_SkyStone extends LinearOpMode {
     private VuforiaTrackable rearWallTgt = null;
     private VuforiaTrackable frontWallTgt = null;
     private VuforiaTrackable parkWallTgt = null;
+    private VuforiaTrackable sideWallTgt = null;
     private double turnSpeed = 0.0;
 
     private int stateCnt = 0;
@@ -115,11 +116,13 @@ public class Auton_SkyStone extends LinearOpMode {
         if (allianceColor == Hardware.COLOR.RED) {
             frontWallTgt = vu.front1;
             rearWallTgt = vu.rear1;
+            sideWallTgt = vu.red2;
             turnSpeed = 0.5;
 
         } else {
             frontWallTgt = vu.front2;
             rearWallTgt = vu.rear2;
+            sideWallTgt = vu.blue2;
             turnSpeed = -0.5;
         }
         parkWallTgt = rearWallTgt;
@@ -217,7 +220,9 @@ public class Auton_SkyStone extends LinearOpMode {
             /* Move Foundation if enabled                             */
             /**********************************************************/
 
+
             case 50:
+                parkWallTgt = frontWallTgt;
                 if (foundation) {
                     stateCnt++;
                 } else {
@@ -225,7 +230,76 @@ public class Auton_SkyStone extends LinearOpMode {
                 }
                 break;
 
-            case 51:
+            case 51: // Turn to Rear Wall Image
+                robot.setDriveSpeed(turnSpeed, -turnSpeed);
+                trackTarget(rearWallTgt, 48.0);
+                if (robot.getTrackState() == Hardware.TRACK.TRACKING) {
+                    stateCnt++;
+                }
+                break;
+
+            case 52: // Drive to Side Image
+                trackTarget(rearWallTgt, 48.0);
+                if (robot.getTrackState() == Hardware.TRACK.STOPPED) {
+                    stateCnt++;
+                }
+                break;
+
+            case 53: // Turn to Side Wall Image
+                robot.setDriveSpeed(turnSpeed, -turnSpeed);
+                trackTarget(sideWallTgt, 96.0);
+                if (robot.getTrackState() == Hardware.TRACK.TRACKING) {
+                    stateCnt++;
+                }
+                break;
+
+            case 54: // Drive to Side Image
+                trackTarget(sideWallTgt, 96.0);
+                if (robot.getTrackState() == Hardware.TRACK.STOPPED) {
+                    stateCnt++;
+                }
+                break;
+
+            case 55: // Control Foundation
+                robot.setFoundation(Hardware.POS.DOWN);
+                timer.reset();
+                stateCnt++;
+                break;
+
+            case 56: // Wait 1 sec for Servo to drop
+                if (timer.time() >= 1000) {
+                    stateCnt++;
+                }
+                break;
+
+            case 57: // Reverse and Turn
+                robot.setDriveSpeed(turnSpeed, -turnSpeed);
+                trackTarget(rearWallTgt, 36.0);
+                if (robot.getTrackState() == Hardware.TRACK.TRACKING) {
+                    stateCnt++;
+                }
+                break;
+
+            case 58: // Forward and Turn
+                trackTarget(rearWallTgt, 2.0);
+                if (robot.getTrackState() == Hardware.TRACK.STOPPED) {
+                    stateCnt++;
+                }
+                break;
+
+            case 59: // Release Foundation
+                robot.setFoundation(Hardware.POS.UP);
+                timer.reset();
+                stateCnt++;
+                break;
+
+            case 60: // Wait 1 sec for Servo to raise
+                if (timer.time() >= 1000) {
+                    stateCnt++;
+                }
+                break;
+
+            case 61:
                 stateCnt = 100;
                 break;
 
