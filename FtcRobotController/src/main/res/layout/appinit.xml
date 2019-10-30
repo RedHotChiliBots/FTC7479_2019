@@ -2,40 +2,42 @@
 
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/tableLayout1"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:shrinkColumns="*"
-    android:stretchColumns="*">
+    android:shrinkColumns="*">
 
     <TableRow
         android:id="@+id/tableRow1"
         android:background="@color/FIRST_FTC"
-        android:gravity="center_vertical"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent">
+        android:layout_height="23dp">
 
         <TextView
             android:id="@+id/textView1"
-            android:layout_height="23dp"
-            android:layout_width="100dp"
+            android:layout_column="0"
             android:text="@string/allianceText"
             android:textAppearance="@android:style/TextAppearance"
             android:textStyle="bold" />
 
         <RadioGroup
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_height="23dp"
+            android:layout_width="200dp"
+            android:layout_span="2">
 
             <RadioButton
                 android:id="@+id/buttonRed"
                 android:layout_height="23dp"
-                android:layout_width="100dp"
+                android:layout_width="80dp"
+                android:layout_column="1"
                 android:onClick="onAllianceClicked"
                 android:text="@string/redText" />
 
             <RadioButton
                 android:id="@+id/buttonBlue"
                 android:layout_height="23dp"
-                android:layout_width="100dp"
+                android:layout_width="80dp"
+                android:layout_column="2"
                 android:onClick="onAllianceClicked"
                 android:text="@string/blueText" />
         </RadioGroup>
@@ -43,27 +45,29 @@
     <TableRow
         android:id="@+id/tableRow2"
         android:background="@color/FIRST_FTC"
-        android:gravity="left"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent">
+        android:layout_height="23dp">
+
         <CheckBox
             android:id="@+id/checkSkyStone"
             android:layout_height="23dp"
-            android:layout_width="50dp"
+            android:layout_width="110dp"
+            android:layout_column="0"
             android:onClick="onSkyStoneClicked"
             android:text="@string/skystoneText" />
 
         <CheckBox
             android:id="@+id/checkFoundation"
             android:layout_height="23dp"
-            android:layout_width="50dp"
+            android:layout_width="130dp"
+            android:layout_column="1"
             android:onClick="onFoundationClicked"
             android:text="@string/foundationText" />
 
         <CheckBox
             android:id="@+id/checkPark"
             android:layout_height="23dp"
-            android:layout_width="50dp"
+            android:layout_width="80dp"
+            android:layout_column="2"
             android:onClick="onParkClicked"
             android:text="@string/parkText" />
     </TableRow>
