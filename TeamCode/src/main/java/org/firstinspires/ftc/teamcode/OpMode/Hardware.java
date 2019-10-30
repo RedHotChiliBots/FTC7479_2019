@@ -106,7 +106,7 @@ public class Hardware {
     private TRACK trackState = TRACK.UNKNOWN;
     private double leftDrive = 0.0;
     private double rightDrive = 0.0;
-    
+
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();
@@ -200,7 +200,7 @@ public class Hardware {
 
     public void setFoundation(Hardware.POS pos) {
         fntnPosition = pos;
-        foundationServo.setPosition(foundationPos.get(FDTN_UP));
+        foundationServo.setPosition(foundationPos.get(pos));
     }
 
     public Hardware.POS getFoundation() {
@@ -209,7 +209,7 @@ public class Hardware {
 
     public void setStone(Hardware.POS pos) {
         stonePosition = pos;
-        stoneServo.setPosition(stonePos.get(STONE_UP));
+        stoneServo.setPosition(stonePos.get(pos));
     }
 
     public Hardware.POS getStone() {
