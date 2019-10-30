@@ -171,7 +171,7 @@ public class Auton_SkyStone extends LinearOpMode {
                 break;
 
             case 2: // Control SkyStone
-                robot.setStoneSpeed(robot.LEFT_IN, robot.RIGHT_IN);
+                robot.setStone(Hardware.POS.DOWN);
                 timer.reset();
                 stateCnt++;
                 break;
@@ -198,7 +198,7 @@ public class Auton_SkyStone extends LinearOpMode {
                 break;
 
             case 6: // Release SkyStone
-                robot.setStoneSpeed(robot.LEFT_OUT, robot.RIGHT_OUT);
+                robot.setStone(Hardware.POS.UP);
                 timer.reset();
                 stateCnt++;
                 break;
