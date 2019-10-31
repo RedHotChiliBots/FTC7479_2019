@@ -37,6 +37,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -98,8 +99,8 @@ public class Hardware {
     public enum COLOR {RED,BLUE,OTHER}
     public enum TRACK {TRACKING,STOPPED,UNKNOWN}
 
-    private Map<POS, Double> stonePos = null;
-    private Map<POS, Double> foundationPos = null;
+    private Map<POS, Double> stonePos = new HashMap<POS, Double>();
+    private Map<POS, Double> foundationPos = new HashMap<POS, Double>();
 
     private POS fntnPosition = null;
     private POS stonePosition = null;

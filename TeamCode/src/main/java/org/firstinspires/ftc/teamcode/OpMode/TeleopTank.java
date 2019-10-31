@@ -49,7 +49,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Teleop Tank", group="Teleop")
 //@Disabled
-public class TeleOp extends OpMode {
+public class TeleopTank extends OpMode {
 
     /* Declare OpMode members. */
     private Hardware robot           = new Hardware(); // use the class created to define a Pushbot's hardware
@@ -113,9 +113,10 @@ public class TeleOp extends OpMode {
 
         // Send telemetry message to signify robot running;
 //        telemetry.addData("claw",  "Offset = %.2f", clawOffset);
-        telemetry.addData("Drive {left, right}",  "%4.2f  %4.2f", robot.getDriveSpeed());
-        telemetry.addData("Stone", "%.2f", robot.getStone());
-        telemetry.addData("Foundation", "%.2f", robot.getFoundation());
+        telemetry.addData("Drive {left, right}",  "%4.2f  %4.2f",
+                robot.getDriveSpeed().get(0), robot.getDriveSpeed().get(1));
+        telemetry.addData("Stone", "%s", robot.getStone());
+        telemetry.addData("Foundation", "%s", robot.getFoundation());
         telemetry.update();
     }
 
