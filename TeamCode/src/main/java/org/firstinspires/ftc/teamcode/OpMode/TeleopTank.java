@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode.OpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -53,7 +54,7 @@ public class TeleopTank extends OpMode {
 
     /* Declare OpMode members. */
     private Hardware robot           = new Hardware(); // use the class created to define a Pushbot's hardware
-
+    ElapsedTime timer = new ElapsedTime();
 
     public void TelopTank() {
         msStuckDetectInit = 10000;
@@ -86,7 +87,7 @@ public class TeleopTank extends OpMode {
      */
     @Override
     public void start() {
-
+        timer.reset();
     }
 
     /*
@@ -113,10 +114,13 @@ public class TeleopTank extends OpMode {
         }
 
         if (gamepad2.x) {
-            if (robot.getClaw() != Hardware.POS1.OPEN) {
-                robot.setClaw(Hardware.POS1.OPEN);
-            } else {
-                robot.setClaw(Hardware.POS1.CLOSED);
+            if (timer.time() > 0.5) {
+                timer.reset();
+                if (robot.getClaw() != Hardware.POS1.OPEN) {
+                    robot.setClaw(Hardware.POS1.OPEN);
+                } else {
+                    robot.setClaw(Hardware.POS1.CLOSED);
+                }
             }
         }
 
