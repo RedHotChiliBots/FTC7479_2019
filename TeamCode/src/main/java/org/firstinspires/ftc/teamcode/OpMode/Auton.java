@@ -174,7 +174,7 @@ public class Auton extends LinearOpMode {
                 break;
 
             case 2: // Control SkyStone
-                robot.setStone(Hardware.POS.DOWN);
+                robot.setStone(Hardware.POS2.DOWN);
                 timer.reset();
                 stateCnt++;
                 break;
@@ -201,7 +201,7 @@ public class Auton extends LinearOpMode {
                 break;
 
             case 6: // Release SkyStone
-                robot.setStone(Hardware.POS.UP);
+                robot.setStone(Hardware.POS2.UP);
                 timer.reset();
                 stateCnt++;
                 break;
@@ -261,7 +261,7 @@ public class Auton extends LinearOpMode {
                 break;
 
             case 55: // Control Foundation
-                robot.setFoundation(Hardware.POS.DOWN);
+                robot.setFoundation(Hardware.POS2.DOWN);
                 timer.reset();
                 stateCnt++;
                 break;
@@ -288,7 +288,7 @@ public class Auton extends LinearOpMode {
                 break;
 
             case 59: // Release Foundation
-                robot.setFoundation(Hardware.POS.UP);
+                robot.setFoundation(Hardware.POS2.UP);
                 timer.reset();
                 stateCnt++;
                 break;

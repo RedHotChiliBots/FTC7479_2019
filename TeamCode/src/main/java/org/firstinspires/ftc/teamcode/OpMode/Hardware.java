@@ -84,8 +84,13 @@ public class Hardware {
     public DcMotor leftRearDrive    = null;
     public DcMotor rightRearDrive   = null;
 
+    public DcMotor boomMotor   = null;
+
     public Servo foundationServo  = null;
     public Servo stoneServo  = null;
+    public Servo turretServo  = null;
+    public Servo wristServo  = null;
+    public Servo clawServo = null;
 
     public final double FDTN_UP  = 0.75;
     public final double FDTN_DN  = 0.0;
@@ -95,18 +100,36 @@ public class Hardware {
     public final double STONE_DN  = 0.0;
     public final double STONE_STOW  = STONE_UP;
 
-    public enum POS {UP, DOWN, STOW};
+    public final double CLAW_OPEN  = 0.75;
+    public final double CLAW_CLOSED  = 0.0;
+    public final double CLAW_STOW  = CLAW_CLOSED;
+
+    public final double TURRET_MAX  = 0.75;
+    public final double TURRET_MIN  = 0.0;
+    public final double TURRET_STOW  = TURRET_MAX;
+
+    public final double WRIST_MAX  = 0.75;
+    public final double WRIST_MIN  = 0.0;
+    public final double WRIST_STOW  = WRIST_MAX;
+
+    public enum POS1 {OPEN, CLOSED, STOW};
+    public enum POS2 {UP, DOWN, STOW};
     public enum COLOR {RED,BLUE,OTHER}
     public enum TRACK {TRACKING,STOPPED,UNKNOWN}
 
-    private Map<POS, Double> stonePos = new HashMap<POS, Double>();
-    private Map<POS, Double> foundationPos = new HashMap<POS, Double>();
+    private Map<POS1, Double> clawPos = new HashMap<POS1, Double>();
+    private Map<POS2, Double> stonePos = new HashMap<POS2, Double>();
+    private Map<POS2, Double> foundationPos = new HashMap<POS2, Double>();
 
-    private POS fntnPosition = null;
-    private POS stonePosition = null;
+    private double turretPosition = 0.0;
+    private double wristPosition = 0.0;
+    private POS1 clawPosition = null;
+    private POS2 fntnPosition = null;
+    private POS2 stonePosition = null;
     private TRACK trackState = null;
     private double leftDrive = 0.0;
     private double rightDrive = 0.0;
+    private double boomSpeed = 0.0;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -148,15 +171,19 @@ public class Hardware {
         setTrackState(TRACK.UNKNOWN);
 
         /***********************************************************/
-        /*********** Initialize Constant Values         ************/
+       /*********** Initialize Constant Values         ************/
         /***********************************************************/
-        stonePos.put(POS.UP, STONE_UP);
-        stonePos.put(POS.DOWN, STONE_DN);
-        stonePos.put(POS.STOW, STONE_STOW);
+        clawPos.put(POS1.OPEN, CLAW_OPEN);
+        clawPos.put(POS1.CLOSED, CLAW_CLOSED);
+        clawPos.put(POS1.STOW, CLAW_STOW);
 
-        foundationPos.put(POS.UP, FDTN_UP);
-        foundationPos.put(POS.DOWN, FDTN_DN);
-        foundationPos.put(POS.STOW, FDTN_STOW);
+        stonePos.put(POS2.UP, STONE_UP);
+        stonePos.put(POS2.DOWN, STONE_DN);
+        stonePos.put(POS2.STOW, STONE_STOW);
+
+        foundationPos.put(POS2.UP, FDTN_UP);
+        foundationPos.put(POS2.DOWN, FDTN_DN);
+        foundationPos.put(POS2.STOW, FDTN_STOW);
 
         /***********************************************************/
         /*********** Define and Initialize Drive Motors ************/
@@ -186,35 +213,87 @@ public class Hardware {
         leftRearDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightRearDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        // Define each drive motor
+        boomMotor = hwMap.get(DcMotor.class, "boomMotor");
+
+        // Initialize  motor to correct rotation
+        boomMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+
+        // Initialize all motor to zero power
+        boomMotor.setPower(0);
+
+        // Initialize motor to run with encoders.
+        // May want to use RUN_USING_ENCODERS if encoders are installed.
+        boomMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         /***********************************************************/
         /************** Define and Initialize Servos ***************/
         /***********************************************************/
 
+        turretServo = hwMap.get(Servo.class, "turretServo");
+
+        setTurret(TURRET_STOW);
+
+        wristServo = hwMap.get(Servo.class, "wristServo");
+
+        setWrist(WRIST_STOW);
+
+        clawServo = hwMap.get(Servo.class, "clawServo");
+
+        setClaw(POS1.STOW);
+
         foundationServo = hwMap.get(Servo.class, "foundationServo");
 
-        setFoundation(POS.STOW);
+        setFoundation(POS2.STOW);
 
         stoneServo = hwMap.get(Servo.class, "stoneServo");
 
-        setStone(POS.STOW);
+        setStone(POS2.STOW);
     }
 
 
-    public void setFoundation(Hardware.POS pos) {
+    public void setTurret(double pos) {
+        turretPosition = pos;
+        turretServo.setPosition(pos);
+    }
+
+    public double getTurret() {
+        return turretPosition;
+    }
+
+    public void setWrist(double pos) {
+        wristPosition = pos;
+        wristServo.setPosition(pos);
+    }
+
+    public double getWrist() {
+        return wristPosition;
+    }
+
+    public void setClaw(POS1 pos) {
+        clawPosition = pos;
+        clawServo.setPosition(clawPos.get(pos));
+    }
+
+    public POS1 getClaw() {
+        return clawPosition;
+    }
+
+    public void setFoundation(POS2 pos) {
         fntnPosition = pos;
         foundationServo.setPosition(foundationPos.get(pos));
     }
 
-    public Hardware.POS getFoundation() {
+    public POS2 getFoundation() {
         return fntnPosition;
     }
 
-    public void setStone(Hardware.POS pos) {
+    public void setStone(POS2 pos) {
         stonePosition = pos;
         stoneServo.setPosition(stonePos.get(pos));
     }
 
-    public Hardware.POS getStone() {
+    public POS2 getStone() {
         return stonePosition;
     }
 
@@ -229,6 +308,15 @@ public class Hardware {
 
     public List<Double> getDriveSpeed() {
         return Arrays.asList(leftDrive, rightDrive);
+    }
+
+    public void setBoomSpeed(double s) {
+        boomSpeed = s;
+        boomMotor.setPower(s);
+    }
+
+    public double getBoomSpeed() {
+        return boomSpeed;
     }
 
     public void setTrackState(TRACK s) {

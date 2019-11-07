@@ -30,7 +30,7 @@
 package org.firstinspires.ftc.teamcode.OpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.Range;
 
 /**
  * This file provides basic Telop driving for a Pushbot robot.
@@ -98,25 +98,62 @@ public class TeleopTank extends OpMode {
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         robot.setDriveSpeed(-gamepad1.left_stick_y, -gamepad1.right_stick_y);
 
+        robot.setBoomSpeed(gamepad2.left_stick_y);
 
         if (gamepad2.left_bumper) {
-            robot.setFoundation(Hardware.POS.UP);
+            robot.setFoundation(Hardware.POS2.UP);
         } else if (gamepad2.right_bumper) {
-            robot.setFoundation(Hardware.POS.DOWN);
+            robot.setFoundation(Hardware.POS2.DOWN);
         }
 
         if (Math.abs(gamepad2.left_trigger) > 0.5) {
-            robot.setStone(Hardware.POS.UP);
+            robot.setStone(Hardware.POS2.UP);
         } else if (Math.abs(gamepad2.right_trigger) > 0.5) {
-            robot.setStone(Hardware.POS.DOWN);
+            robot.setStone(Hardware.POS2.DOWN);
+        }
+
+        if (gamepad2.x) {
+            if (robot.getClaw() != Hardware.POS1.OPEN) {
+                robot.setClaw(Hardware.POS1.OPEN);
+            } else {
+                robot.setClaw(Hardware.POS1.CLOSED);
+            }
+        }
+
+        if (gamepad2.dpad_left) {
+            double pos = robot.getTurret();
+            Range.clip(pos+0.1,0.0,1.0);
+            robot.setTurret(pos);
+        }
+
+        if (gamepad2.dpad_right) {
+            double pos = robot.getTurret();
+            Range.clip(pos-0.1,0.0,1.0);
+            robot.setTurret(pos);
+        }
+
+        if (gamepad2.dpad_up) {
+            double pos = robot.getWrist();
+            Range.clip(pos+0.1,0.0,1.0);
+            robot.setWrist(pos);
+        }
+
+        if (gamepad2.dpad_down) {
+            double pos = robot.getWrist();
+            Range.clip(pos+0.1,0.0,1.0);
+            robot.setWrist(pos);
         }
 
         // Send telemetry message to signify robot running;
 //        telemetry.addData("claw",  "Offset = %.2f", clawOffset);
         telemetry.addData("Drive {left, right}",  "%4.2f  %4.2f",
                 robot.getDriveSpeed().get(0), robot.getDriveSpeed().get(1));
+        telemetry.addData("Boom",  "%4.2f", robot.getBoomSpeed());
         telemetry.addData("Stone", "%s", robot.getStone());
         telemetry.addData("Foundation", "%s", robot.getFoundation());
+        telemetry.addData("Turret", "%s", robot.getTurret());
+        telemetry.addData("Wrist", "%s", robot.getWrist());
+        telemetry.addData("Claw", "%s", robot.getClaw());
         telemetry.update();
     }
 
