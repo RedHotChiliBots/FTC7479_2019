@@ -114,16 +114,16 @@ public class Auton extends LinearOpMode {
         park = FtcRobotControllerActivity.isPark();
 
         if (allianceColor == Hardware.COLOR.RED) {
-            frontWallTgt = vu.front1;
-            rearWallTgt = vu.rear1;
-            sideWallTgt = vu.red2;
-            turnSpeed = 0.5;
+            frontWallTgt = vu.rear2;
+            rearWallTgt = vu.front1;
+            sideWallTgt = vu.blue2;
+            turnSpeed = 0.25;
 
         } else {
-            frontWallTgt = vu.front2;
-            rearWallTgt = vu.rear2;
-            sideWallTgt = vu.blue2;
-            turnSpeed = -0.5;
+            frontWallTgt = vu.rear1;
+            rearWallTgt = vu.front2;
+            sideWallTgt = vu.red1;
+            turnSpeed = -0.25;
         }
         parkWallTgt = rearWallTgt;
 

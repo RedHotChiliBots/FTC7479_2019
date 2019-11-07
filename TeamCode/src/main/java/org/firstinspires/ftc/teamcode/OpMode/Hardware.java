@@ -92,11 +92,11 @@ public class Hardware {
     public Servo wristServo  = null;
     public Servo clawServo = null;
 
-    public final double FDTN_UP  = 0.75;
-    public final double FDTN_DN  = 0.0;
+    public final double FDTN_UP  = 0.5;
+    public final double FDTN_DN  = 0.25;
     public final double FDTN_STOW  = FDTN_UP;
 
-    public final double STONE_UP  = 0.75;
+    public final double STONE_UP  = 0.65;
     public final double STONE_DN  = 0.0;
     public final double STONE_STOW  = STONE_UP;
 
@@ -106,10 +106,10 @@ public class Hardware {
 
     public final double TURRET_MAX  = 0.75;
     public final double TURRET_MIN  = 0.0;
-    public final double TURRET_STOW  = TURRET_MAX;
+    public final double TURRET_STOW  = TURRET_MIN;
 
-    public final double WRIST_MAX  = 0.75;
-    public final double WRIST_MIN  = 0.0;
+    public final double WRIST_MAX  = 0.0;
+    public final double WRIST_MIN  = 0.75;
     public final double WRIST_STOW  = WRIST_MAX;
 
     public enum POS1 {OPEN, CLOSED, STOW};
@@ -195,10 +195,10 @@ public class Hardware {
         rightRearDrive = hwMap.get(DcMotor.class, "rightRearDrive");
 
         // Initialize drive motors to correct rotation
-        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-        leftRearDrive.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        rightRearDrive.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+        leftRearDrive.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        rightRearDrive.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
 
         // Initialize all drive motors to zero power
         leftFrontDrive.setPower(0);
@@ -311,8 +311,8 @@ public class Hardware {
     }
 
     public void setBoomSpeed(double s) {
-        boomSpeed = s;
-        boomMotor.setPower(s);
+        boomSpeed = s * 0.5;
+        boomMotor.setPower(boomSpeed);
     }
 
     public double getBoomSpeed() {
