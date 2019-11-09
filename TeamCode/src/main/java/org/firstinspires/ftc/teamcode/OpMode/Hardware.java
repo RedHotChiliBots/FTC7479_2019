@@ -104,9 +104,9 @@ public class Hardware {
     public final double CLAW_CLOSED  = 0.0;
     public final double CLAW_STOW  = CLAW_CLOSED;
 
-    public final double TURRET_MAX  = 0.75;
+    public final double TURRET_MAX  = 1.0;
     public final double TURRET_MIN  = 0.0;
-    public final double TURRET_STOW  = TURRET_MIN;
+    public final double TURRET_STOW  = 0.5;
 
     public final double WRIST_MAX  = 0.0;
     public final double WRIST_MIN  = 0.75;

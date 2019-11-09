@@ -99,8 +99,6 @@ public class TeleopTank extends OpMode {
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         robot.setDriveSpeed(-gamepad1.left_stick_y, -gamepad1.right_stick_y);
 
-        robot.setBoomSpeed(gamepad2.left_stick_y);
-
         if (gamepad2.left_bumper) {
             robot.setFoundation(Hardware.POS2.UP);
         } else if (gamepad2.right_bumper) {
@@ -124,32 +122,33 @@ public class TeleopTank extends OpMode {
             }
         }
 
-        if (gamepad2.dpad_left) {
-            double pos = robot.getTurret();
-            Range.clip(pos+0.1,0.0,1.0);
+        robot.setBoomSpeed(gamepad2.left_stick_y);
+
+        if (gamepad2.left_stick_x > 0.1) {
+            double pos = robot.getTurret() + (gamepad2.left_stick_x / 10.0);
+            Range.clip(pos,0.0,1.0);
             robot.setTurret(pos);
         }
-
+/*
         if (gamepad2.dpad_right) {
             double pos = robot.getTurret();
             Range.clip(pos-0.1,0.0,1.0);
             robot.setTurret(pos);
         }
-
-        if (gamepad2.dpad_up) {
-            double pos = robot.getWrist();
-            Range.clip(pos+0.1,0.0,1.0);
+*/
+        if (gamepad2.right_stick_y > 0.1) {
+            double pos = robot.getWrist() + (gamepad2.right_stick_y / 10.0);
+            Range.clip(pos,0.0,1.0);
             robot.setWrist(pos);
         }
-
+/*
         if (gamepad2.dpad_down) {
             double pos = robot.getWrist();
             Range.clip(pos+0.1,0.0,1.0);
             robot.setWrist(pos);
         }
-
+*/
         // Send telemetry message to signify robot running;
-//        telemetry.addData("claw",  "Offset = %.2f", clawOffset);
         telemetry.addData("Drive {left, right}",  "%4.2f  %4.2f",
                 robot.getDriveSpeed().get(0), robot.getDriveSpeed().get(1));
         telemetry.addData("Boom",  "%4.2f", robot.getBoomSpeed());
