@@ -96,8 +96,25 @@ public class TeleopTank extends OpMode {
     @Override
     public void loop() {
 
+        // Toggle Robot Half Speed with debounce
+        if (gamepad1.x) {
+            if (timer.time() > 0.5) {
+                timer.reset();
+                robot.toggleHalfSpeed();
+            }
+        }
+
+        // Toggle Robot Direction with debounce
+        if (gamepad1.y) {
+            if (timer.time() > 0.5) {
+                timer.reset();
+                robot.toggleDriveDir();
+            }
+        }
+
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         robot.setDriveSpeed(-gamepad1.left_stick_y, -gamepad1.right_stick_y);
+//        robot.setDriveMecanum(-gamepad1.left_stick_x, -gamepad1.left_stick_y, -gamepad1.right_stick_x);
 
         robot.setBoomSpeed(gamepad2.left_stick_y);
 
@@ -150,8 +167,9 @@ public class TeleopTank extends OpMode {
 
         // Send telemetry message to signify robot running;
 //        telemetry.addData("claw",  "Offset = %.2f", clawOffset);
-        telemetry.addData("Drive {left, right}",  "%4.2f  %4.2f",
-                robot.getDriveSpeed().get(0), robot.getDriveSpeed().get(1));
+        telemetry.addData("Drive",  "%s  $s  %5.2f  %5.2f",
+                robot.getDriveDir(), robot.getDriveHalfSpeed(), robot.getDriveSpeed().get(0), robot.getDriveSpeed().get(1));
+
         telemetry.addData("Boom",  "%4.2f", robot.getBoomSpeed());
         telemetry.addData("Stone", "%s", robot.getStone());
         telemetry.addData("Foundation", "%s", robot.getFoundation());
