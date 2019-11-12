@@ -57,16 +57,16 @@ import java.util.List;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Auton SkyStone", group="Auton")
+@Autonomous(name="AutonTime SkyStone", group="Auton")
 //@Disabled
-public class Auton extends LinearOpMode {
+public class AutonTime extends LinearOpMode {
 
     /* Declare OpMode members. */
     Hardware robot           = new Hardware(); // use the class created to define a Pushbot's hardware
     VuforiaSkyStoneWebcam vu = new VuforiaSkyStoneWebcam();
-    Library lib              = new Library();
+    Library lib = new Library();
 
-    private Hardware.COLOR allianceColor = Hardware.COLOR.OTHER;
+    private Hardware.COLOR      allianceColor = Hardware.COLOR.OTHER;
     private boolean skystone = false;
     private boolean foundation = false;
     private boolean park = false;
@@ -159,184 +159,29 @@ public class Auton extends LinearOpMode {
             /* Deliver SkyStone if enabled                            */
             /**********************************************************/
             case 0: // Initialize
-                if (skystone) {
-                    stateCnt++;
-                } else {
-                    stateCnt = 50;
-                }
+                timer.reset();
+                stateCnt++;
                 break;
 
             case 1: // Drive to Stone Image
-                parkWallTgt = frontWallTgt;
-                trackTarget(vu.stoneTarget, 3.0);
-                if (robot.getTrackState() == Hardware.TRACK.STOPPED) {
+                if (timer.time() > 0.0) {
                     stateCnt++;
                 }
                 break;
 
             case 2: // Control SkyStone
-                robot.setStone(Hardware.POS2.DOWN);
                 timer.reset();
+                robot.setDriveSpeed(0.6, 0.6);
                 stateCnt++;
                 break;
 
             case 3: // Wait 1 sec for Servo to drop
-                if (timer.time() >= 1000) {
+                if (timer.time() >= 2.0) {
+                    robot.setDriveSpeed(0.0, 0.0);
                     stateCnt++;
                 }
                 break;
 
-            case 4: // Turn to Rear Wall Image
-                robot.setDriveSpeed(turnSpeed, -turnSpeed);
-                trackTarget(rearWallTgt, 36.0);
-                if (robot.getTrackState() == Hardware.TRACK.TRACKING) {
-                    stateCnt++;
-                }
-                break;
-
-            case 5: // Track Rear Wall Image
-                trackTarget(rearWallTgt, 36.0);
-                if (robot.getTrackState() == Hardware.TRACK.STOPPED) {
-                    stateCnt++;
-                }
-                break;
-
-            case 6: // Release SkyStone
-                robot.setStone(Hardware.POS2.UP);
-                timer.reset();
-                stateCnt++;
-                break;
-
-            case 7: // Wait 1 sec for Servo to raise
-                if (timer.time() >= 1000) {
-                    stateCnt++;
-                }
-                break;
-
-            case 8:
-                stateCnt = 50;
-                break;
-
-            /**********************************************************/
-            /* Move Foundation if enabled                             */
-            /**********************************************************/
-
-
-            case 50:
-                parkWallTgt = frontWallTgt;
-                if (foundation) {
-                    stateCnt++;
-                } else {
-                    stateCnt = 100;
-                }
-                break;
-
-            case 51: // Turn to Rear Wall Image
-                robot.setDriveSpeed(turnSpeed, -turnSpeed);
-                trackTarget(rearWallTgt, 48.0);
-                if (robot.getTrackState() == Hardware.TRACK.TRACKING) {
-                    stateCnt++;
-                }
-                break;
-
-            case 52: // Drive to Side Image
-                trackTarget(rearWallTgt, 48.0);
-                if (robot.getTrackState() == Hardware.TRACK.STOPPED) {
-                    stateCnt++;
-                }
-                break;
-
-            case 53: // Turn to Side Wall Image
-                robot.setDriveSpeed(turnSpeed, -turnSpeed);
-                trackTarget(sideWallTgt, 96.0);
-                if (robot.getTrackState() == Hardware.TRACK.TRACKING) {
-                    stateCnt++;
-                }
-                break;
-
-            case 54: // Drive to Side Image
-                trackTarget(sideWallTgt, 96.0);
-                if (robot.getTrackState() == Hardware.TRACK.STOPPED) {
-                    stateCnt++;
-                }
-                break;
-
-            case 55: // Control Foundation
-                robot.setFoundation(Hardware.POS2.DOWN);
-                timer.reset();
-                stateCnt++;
-                break;
-
-            case 56: // Wait 1 sec for Servo to drop
-                if (timer.time() >= 1000) {
-                    stateCnt++;
-                }
-                break;
-
-            case 57: // Reverse and Turn
-                robot.setDriveSpeed(turnSpeed, -turnSpeed);
-                trackTarget(rearWallTgt, 36.0);
-                if (robot.getTrackState() == Hardware.TRACK.TRACKING) {
-                    stateCnt++;
-                }
-                break;
-
-            case 58: // Forward and Turn
-                trackTarget(rearWallTgt, 2.0);
-                if (robot.getTrackState() == Hardware.TRACK.STOPPED) {
-                    stateCnt++;
-                }
-                break;
-
-            case 59: // Release Foundation
-                robot.setFoundation(Hardware.POS2.UP);
-                timer.reset();
-                stateCnt++;
-                break;
-
-            case 60: // Wait 1 sec for Servo to raise
-                if (timer.time() >= 1000) {
-                    stateCnt++;
-                }
-                break;
-
-            case 61:
-                stateCnt = 100;
-                break;
-
-            /**********************************************************/
-            /* Park if enabled                                        */
-            /**********************************************************/
-            case 100:
-                if (park) {
-                    stateCnt++;
-                } else {
-                    stateCnt = 150;
-                }
-                break;
-
-            case 101: // Turn to Front Wall Image
-                robot.setDriveSpeed(turnSpeed, -turnSpeed);
-                trackTarget(parkWallTgt, 72.0);
-                if (robot.getTrackState() == Hardware.TRACK.TRACKING) {
-                    stateCnt++;
-                }
-                break;
-
-            case 102: // Track Front Wall Image
-                trackTarget(parkWallTgt, 72.0);
-                if (robot.getTrackState() == Hardware.TRACK.STOPPED) {
-                    stateCnt++;
-                }
-                break;
-
-            case 103:
-                stateCnt = 150;
-                break;
-
-            case 150:    // Parked
-                stateCnt++;
-                break;
 
             default:
                 stateCnt++;
