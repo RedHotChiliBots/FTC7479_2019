@@ -33,6 +33,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.Library.*;
+
 /**
  * This file provides basic Telop driving for a Pushbot robot.
  * The code is structured as an Iterative OpMode
@@ -55,6 +57,7 @@ public class TeleopTank extends OpMode {
     /* Declare OpMode members. */
     private Hardware robot           = new Hardware(); // use the class created to define a Pushbot's hardware
     ElapsedTime timer = new ElapsedTime();
+    Library lib = new Library();
 
     public void TelopTank() {
         msStuckDetectInit = 10000;
@@ -124,9 +127,9 @@ public class TeleopTank extends OpMode {
 
         robot.setBoomSpeed(gamepad2.left_stick_y);
 
-        if (gamepad2.left_stick_x > 0.1) {
-            double pos = robot.getTurret() + (gamepad2.left_stick_x / 10.0);
-            Range.clip(pos,0.0,1.0);
+        if (Math.abs(gamepad2.left_stick_x) > 0.1) {
+            double pos = robot.getTurret() + (gamepad2.left_stick_x / 1000.0);
+            lib.clip(pos,0.0,1.0);
             robot.setTurret(pos);
         }
 /*
@@ -136,9 +139,9 @@ public class TeleopTank extends OpMode {
             robot.setTurret(pos);
         }
 */
-        if (gamepad2.right_stick_y > 0.1) {
-            double pos = robot.getWrist() + (gamepad2.right_stick_y / 10.0);
-            Range.clip(pos,0.0,1.0);
+        if (Math.abs(gamepad2.right_stick_y) > 0.1) {
+            double pos = robot.getWrist() + (gamepad2.right_stick_y / 100.0);
+            lib.clip(pos,0.0,1.0);
             robot.setWrist(pos);
         }
 /*
@@ -155,6 +158,7 @@ public class TeleopTank extends OpMode {
         telemetry.addData("Stone", "%s", robot.getStone());
         telemetry.addData("Foundation", "%s", robot.getFoundation());
         telemetry.addData("Turret", "%s", robot.getTurret());
+        telemetry.addData("Turret y-axis", "%5.3f", gamepad2.left_stick_x);
         telemetry.addData("Wrist", "%s", robot.getWrist());
         telemetry.addData("Claw", "%s", robot.getClaw());
         telemetry.update();

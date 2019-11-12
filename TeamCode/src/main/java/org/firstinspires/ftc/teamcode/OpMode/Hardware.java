@@ -79,47 +79,47 @@ public class Hardware {
 
 
     /* Public OpMode members. */
-    public DcMotor leftFrontDrive   = null;
-    public DcMotor rightFrontDrive  = null;
-    public DcMotor leftRearDrive    = null;
-    public DcMotor rightRearDrive   = null;
+    private DcMotor leftFrontDrive   = null;
+    private DcMotor rightFrontDrive  = null;
+    private DcMotor leftRearDrive    = null;
+    private DcMotor rightRearDrive   = null;
 
-    public DcMotor boomMotor   = null;
+    private DcMotor boomMotor   = null;
 
-    public Servo foundationServo  = null;
-    public Servo stoneServo  = null;
-    public Servo turretServo  = null;
-    public Servo wristServo  = null;
-    public Servo clawServo = null;
+    private Servo foundationServo  = null;
+    private Servo stoneServo  = null;
+    private Servo turretServo  = null;
+    private Servo wristServo  = null;
+    private Servo clawServo = null;
 
-    public final double FDTN_UP  = 0.5;
-    public final double FDTN_DN  = 0.25;
-    public final double FDTN_STOW  = FDTN_UP;
+    private final double FDTN_UP  = 0.5;
+    private final double FDTN_DN  = 0.15;
+    private final double FDTN_STOW  = FDTN_UP;
 
-    public final double STONE_UP  = 0.65;
-    public final double STONE_DN  = 0.0;
-    public final double STONE_STOW  = STONE_UP;
+    private final double STONE_UP  = 0.65;
+    private final double STONE_DN  = 0.0;
+    private final double STONE_STOW  = STONE_UP;
 
-    public final double CLAW_OPEN  = 0.75;
-    public final double CLAW_CLOSED  = 0.0;
-    public final double CLAW_STOW  = CLAW_CLOSED;
+    private final double CLAW_OPEN  = 0.75;
+    private final double CLAW_CLOSED  = 0.0;
+    private final double CLAW_STOW  = CLAW_CLOSED;
 
-    public final double TURRET_MAX  = 1.0;
-    public final double TURRET_MIN  = 0.0;
-    public final double TURRET_STOW  = 0.5;
+    private final double TURRET_MAX  = 1.0;
+    private final double TURRET_MIN  = 0.0;
+    private final double TURRET_STOW  = 0.5;
 
-    public final double WRIST_MAX  = 0.0;
-    public final double WRIST_MIN  = 0.75;
-    public final double WRIST_STOW  = WRIST_MAX;
+    private final double WRIST_MAX  = 0.0;
+    private final double WRIST_MIN  = 0.75;
+    private final double WRIST_STOW  = WRIST_MAX;
 
-    public enum POS1 {OPEN, CLOSED, STOW};
-    public enum POS2 {UP, DOWN, STOW};
+    public enum POS1 {OPEN, CLOSED, STOW}
+    public enum POS2 {UP, DOWN, STOW}
     public enum COLOR {RED,BLUE,OTHER}
     public enum TRACK {TRACKING,STOPPED,UNKNOWN}
 
-    private Map<POS1, Double> clawPos = new HashMap<POS1, Double>();
-    private Map<POS2, Double> stonePos = new HashMap<POS2, Double>();
-    private Map<POS2, Double> foundationPos = new HashMap<POS2, Double>();
+    private Map<POS1, Double> clawPos = new HashMap<>();
+    private Map<POS2, Double> stonePos = new HashMap<>();
+    private Map<POS2, Double> foundationPos = new HashMap<>();
 
     private double turretPosition = 0.0;
     private double wristPosition = 0.0;
@@ -132,7 +132,7 @@ public class Hardware {
     private double boomSpeed = 0.0;
 
     /* local OpMode members. */
-    HardwareMap hwMap           =  null;
+    private HardwareMap hwMap   = null;
     private ElapsedTime period  = new ElapsedTime();
 
     /* Constructor */
